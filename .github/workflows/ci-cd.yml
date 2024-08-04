@@ -23,11 +23,11 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-        working-directory: NoteStrich
+        working-directory: /home/venor/Nostr/NoteStrich
 
       - name: Build the application
         run: npm run build
-        working-directory: NoteStrich
+        working-directory: /home/venor/Nostr/NoteStrich
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
