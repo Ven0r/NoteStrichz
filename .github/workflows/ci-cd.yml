@@ -14,20 +14,18 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3  # Updated to v3
 
       - name: Set up Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3  # Updated to v3
         with:
-          node-version: '14'
+          node-version: '18'  # Specifying the latest LTS version
 
       - name: Install dependencies
         run: npm install
-        working-directory: /home/venor/Nostr/NoteStrich
 
       - name: Build the application
         run: npm run build
-        working-directory: /home/venor/Nostr/NoteStrich
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
@@ -60,5 +58,5 @@ jobs:
             docker pull ${{ secrets.DOCKER_USERNAME }}/notestrich-image:latest
             docker stop notestrich || true
             docker rm notestrich || true
-            docker run -d -
+            docker run -d -p 80:80 --name notestrich ${{ secrets.DOCKER_USERNAME }}/notestrich-image:latest
 
