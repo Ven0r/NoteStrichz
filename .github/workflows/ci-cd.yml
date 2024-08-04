@@ -19,8 +19,14 @@ jobs:
       - name: Print current directory
         run: pwd
 
-      - name: List files in current directory
+      - name: List files in root directory
         run: ls -la
+
+      - name: List files in NoteStrich directory
+        run: ls -la ./NoteStrich
+
+      - name: List files in parent directory
+        run: ls -la ../
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
@@ -29,11 +35,11 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-        working-directory: ./  # Correct working directory relative to the checked out repository
+        working-directory: ./
 
       - name: Build the application
         run: npm run build
-        working-directory: ./  # Correct working directory relative to the checked out repository
+        working-directory: ./
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
@@ -42,7 +48,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build and tag Docker image
-        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/notestrich-image:latest -f ./Nostr/Dockerfile ./  # Correct path to Dockerfile
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/notestrich-image:latest -f Dockerfile ./NoteStrich  # Assuming Dockerfile is in the root
 
       - name: Push Docker image to Docker Hub
         run: docker push ${{ secrets.DOCKER_USERNAME }}/notestrich-image:latest
