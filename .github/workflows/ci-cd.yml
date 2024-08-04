@@ -42,7 +42,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build and tag Docker image
-        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/notestrich-image:latest -f ../Dockerfile .  # Correct path to Dockerfile
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/notestrich-image:latest -f ./Nostr/Dockerfile ./  # Correct path to Dockerfile
 
       - name: Push Docker image to Docker Hub
         run: docker push ${{ secrets.DOCKER_USERNAME }}/notestrich-image:latest
