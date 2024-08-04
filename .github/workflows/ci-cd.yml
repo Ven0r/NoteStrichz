@@ -16,9 +16,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: List directory contents for debugging
+      - name: List root directory contents for debugging
         run: ls -la
-        working-directory: ./NoteStrich
+        working-directory: .  # List contents of the root directory
+
+      - name: List NoteStrich directory contents for debugging
+        run: ls -la
+        working-directory: ./NoteStrich  # List contents of the NoteStrich directory
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
@@ -27,11 +31,11 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-        working-directory: ./NoteStrich
+        working-directory: ./NoteStrich  # Ensure this matches your repo structure
 
       - name: Build the application
         run: npm run build
-        working-directory: ./NoteStrich
+        working-directory: ./NoteStrich  # Ensure this matches your repo structure
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
@@ -40,7 +44,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build and tag Docker image
-        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/notestrich-image:latest -f ../Dockerfile .
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/notestrich-image:latest -f ./Dockerfile .
         env:
           DOCKER_BUILDKIT: 1
 
