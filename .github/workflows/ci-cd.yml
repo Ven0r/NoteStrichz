@@ -16,14 +16,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: List root directory contents for debugging
-        run: ls -la
-        working-directory: .  # List contents of the root directory
-
-      - name: List NoteStrich directory contents for debugging
-        run: ls -la
-        working-directory: ./NoteStrich  # List contents of the NoteStrich directory
-
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
