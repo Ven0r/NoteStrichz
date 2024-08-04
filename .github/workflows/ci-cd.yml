@@ -23,11 +23,11 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-        working-directory: ./Nostr/NoteStrich  # Ensure this path matches the structure
+        working-directory: ./NoteStrich  # Set to NoteStrich directory relative to repo root
 
       - name: Build the application
         run: npm run build
-        working-directory: ./Nostr/NoteStrich  # Ensure this path matches the structure
+        working-directory: ./NoteStrich  # Set to NoteStrich directory relative to repo root
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
@@ -36,9 +36,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build and tag Docker image
-        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/notestrich-image:latest -f ./Nostr/Dockerfile ./Nostr/NoteStrich
-        env:
-          DOCKER_BUILDKIT: 1
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/notestrich-image:latest -f Dockerfile ./NoteStrich  # Dockerfile is in the root
 
       - name: Push Docker image to Docker Hub
         run: docker push ${{ secrets.DOCKER_USERNAME }}/notestrich-image:latest
