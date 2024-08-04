@@ -36,12 +36,12 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build and tag Docker image
-        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/notestrich:latest .
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/notestrich-image:latest .
         env:
           DOCKER_BUILDKIT: 1
 
       - name: Push Docker image to Docker Hub
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/notestrich:latest
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/notestrich-image:latest
 
   deploy:
     runs-on: ubuntu-latest
@@ -57,8 +57,8 @@ jobs:
           port: ${{ secrets.SERVER_SSH_PORT }}
           script: |
             docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-            docker pull ${{ secrets.DOCKER_USERNAME }}/notestrich:latest
+            docker pull ${{ secrets.DOCKER_USERNAME }}/notestrich-image:latest
             docker stop notestrich || true
             docker rm notestrich || true
-            docker run -d -p 80:80 --name notestrich ${{ secrets.DOCKER_USERNAME }}/notestrich:latest
+            docker run -d -
 
