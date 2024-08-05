@@ -18,7 +18,7 @@ RUN npm run build
 
 # Stage 2: Serve the SvelteKit application with Nginx
 FROM nginx:alpine
-COPY --from=build /usr/src/app/build /usr/share/nginx/html
+COPY --from=build /usr/src/app/.svelte-kit/output /usr/share/nginx/html
 
 # Expose the port the app runs on
 EXPOSE 80
