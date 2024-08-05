@@ -28,6 +28,9 @@ jobs:
       - name: List files in NoteStrich directory
         run: ls -la ../NoteStrich
 
+      - name: List build output directory
+        run: ls -la .svelte-kit
+
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
