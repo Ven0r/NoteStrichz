@@ -32,11 +32,9 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-        working-directory: ./NoteStrich
 
       - name: Build the application
         run: npm run build
-        working-directory: ./NoteStrich
 
       - name: List build output directory
         run: ls -la NoteStrich/.svelte-kit
