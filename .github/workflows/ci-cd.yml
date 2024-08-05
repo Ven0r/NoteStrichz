@@ -54,18 +54,22 @@ jobs:
     needs: build
 
     steps:
-      - name: Print SSH key environment variable (redacted)
-        run: echo "${{ secrets.SERVER_SSH_KEY }}"
+      - name: Decode SSH Key
+        id: decode_key
+        run: echo "${{ secrets.SERVER_SSH_KEY_BASE64 }}" | base64 --decode > /tmp/id_rsa
 
-      - name: Verify SSH key length
-        run: echo "${#${{ secrets.SERVER_SSH_KEY }}}"
+      - name: Set permissions on SSH key
+        run: chmod 600 /tmp/id_rsa
+
+      - name: List /tmp directory
+        run: ls -la /tmp
 
       - name: SSH into server
         uses: appleboy/ssh-action@v0.1.4
         with:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
-          key: ${{ secrets.SERVER_SSH_KEY }}
+          key: /tmp/id_rsa
           port: ${{ secrets.SERVER_SSH_PORT }}
           script: |
             docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
@@ -73,5 +77,3 @@ jobs:
             docker stop notestrich || true
             docker rm notestrich || true
             docker run -d -p 80:80 --name notestrich ${{ secrets.DOCKER_USERNAME }}/notestrich-image:latest
-
-
