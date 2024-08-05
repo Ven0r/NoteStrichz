@@ -54,6 +54,12 @@ jobs:
     needs: build
 
     steps:
+      - name: Print SSH key environment variable (redacted)
+        run: echo "${{ secrets.SERVER_SSH_KEY }}"
+
+      - name: Verify SSH key length
+        run: echo "${#${{ secrets.SERVER_SSH_KEY }}}"
+
       - name: SSH into server
         uses: appleboy/ssh-action@v0.1.4
         with:
@@ -67,4 +73,5 @@ jobs:
             docker stop notestrich || true
             docker rm notestrich || true
             docker run -d -p 80:80 --name notestrich ${{ secrets.DOCKER_USERNAME }}/notestrich-image:latest
+
 
