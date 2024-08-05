@@ -56,20 +56,29 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up SSH agent
-        uses: webfactory/ssh-agent@v0.5.3
-        with:
-          ssh-private-key: ${{ secrets.SERVER_SSH_KEY }}
-          ssh-passphrase: ${{ secrets.SERVER_SSH_PASSPHRASE }}
+      - name: Install expect
+        run: sudo apt-get install -y expect
+
+      - name: Add SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SERVER_SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          expect -c "
+          spawn ssh-add ~/.ssh/id_rsa
+          expect \"Enter passphrase for ~/.ssh/id_rsa:\"
+          send \"${{ secrets.SERVER_SSH_PASSPHRASE }}\r\"
+          interact
+          "
 
       - name: SSH into server and deploy
         run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} -p ${{ secrets.SERVER_SSH_PORT }} << 'EOF'
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
           docker pull ${{ secrets.DOCKER_USERNAME }}/notestrich-image:latest
           docker stop notestrich || true
           docker rm notestrich || true
           docker run -d -p 80:80 --name notestrich ${{ secrets.DOCKER_USERNAME }}/notestrich-image:latest
+          EOF
         env:
-          SSH_AUTH_SOCK: ${{ secrets.SSH_AUTH_SOCK }}
-
-
+          SSH_AUTH_SOCK: $SSH_AUTH_SOCK
