@@ -36,9 +36,6 @@ jobs:
       - name: Build the application
         run: npm run build
 
-      - name: List build output directory
-        run: ls -la NoteStrich/.svelte-kit
-
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
