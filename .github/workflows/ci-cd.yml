@@ -26,7 +26,7 @@ jobs:
         run: ls -la ..
 
       - name: List files in NoteStrich directory
-        run: ls -la NoteStrich
+        run: ls -la ../NoteStrich
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
