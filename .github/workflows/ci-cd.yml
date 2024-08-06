@@ -17,15 +17,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Print current directory
-        run: pwd
-
-      - name: List files in root directory
-        run: ls -la
-
-      - name: List files in NoteStrich directory
-        run: ls -la ../NoteStrich
-
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
