@@ -1,5 +1,5 @@
 # Stage 1: Build the SvelteKit application
-FROM node:14 AS build
+FROM node:20 AS build
 
 # Set the working directory
 WORKDIR /usr/src/app
@@ -18,7 +18,9 @@ RUN npm run build
 
 # Stage 2: Serve the SvelteKit application with Nginx
 FROM nginx:alpine
-COPY --from=build /usr/src/app/.svelte-kit/output /usr/share/nginx/html
+
+# Copy the built app from the previous stage
+COPY --from=build /usr/src/app/build /usr/share/nginx/html
 
 # Copy the Nginx configuration file
 COPY nginx.conf /etc/nginx/conf.d/default.conf
