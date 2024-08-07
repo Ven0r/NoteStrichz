@@ -22,7 +22,7 @@ ENV PATH=/usr/src/app/node_modules/.bin:$PATH
 RUN set -e; \
     for i in $(seq 1 5); do \
         npx vite --version && break || (echo "npx vite failed on attempt $i"; \
-        if [ $i -eq 5 ]; then exit 1; fi; \
+        if [ $ i -eq 5 ]; then exit 1; fi; \
         sleep 10); \
     done
 
@@ -37,7 +37,7 @@ RUN set -e; \
         sleep 10); \
     done
 
-# Check if the output directory is created
+# Check if the build directory is created and list its contents
 RUN ls -la /usr/src/app/build
 
 # Stage 2: Serve the SvelteKit application with Nginx
@@ -45,6 +45,9 @@ FROM nginx:alpine
 
 # Copy the built app from the previous stage
 COPY --from=build /usr/src/app/build /usr/share/nginx/html
+
+# Check the contents of the copied build directory
+RUN ls -la /usr/share/nginx/html
 
 # Copy the Nginx configuration file
 COPY nginx.conf /etc/nginx/conf.d/default.conf
