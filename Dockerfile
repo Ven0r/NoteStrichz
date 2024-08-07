@@ -37,14 +37,14 @@ RUN set -e; \
         sleep 10); \
     done
 
-# Check if the build directory is created
-RUN ls -la /usr/src/app/build
+# Check if the output directory is created
+RUN ls -la /usr/src/app/.svelte-kit/output
 
 # Stage 2: Serve the SvelteKit application with Nginx
 FROM nginx:alpine
 
 # Copy the built app from the previous stage
-COPY --from=build /usr/src/app/build /usr/share/nginx/html
+COPY --from=build /usr/src/app/.svelte-kit/output /usr/share/nginx/html
 
 # Copy the Nginx configuration file
 COPY nginx.conf /etc/nginx/conf.d/default.conf
