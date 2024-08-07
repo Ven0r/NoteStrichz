@@ -75,4 +75,3 @@ jobs:
             docker run -d -p 80:80 --name notestrich ${{ secrets.DOCKER_USERNAME }}/notestrich-image:latest
           EOF
 
-
