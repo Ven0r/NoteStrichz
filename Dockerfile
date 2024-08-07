@@ -18,14 +18,24 @@ RUN set -e; \
 # Add node_modules/.bin to PATH
 ENV PATH=/usr/src/app/node_modules/.bin:$PATH
 
-# Verify Vite installation
-RUN npx vite --version || (echo "Vite not found"; exit 1)
+# Verify Vite installation with retry
+RUN set -e; \
+    for i in $(seq 1 5); do \
+        npx vite --version && break || (echo "npx vite failed on attempt $i"; \
+        if [ $i -eq 5 ]; then exit 1; fi; \
+        sleep 10); \
+    done
 
 # Copy the rest of the application code
 COPY . ./
 
-# Build the app for production
-RUN npm run build || (echo "Vite build failed"; exit 1)
+# Build the app for production using npx vite directly
+RUN set -e; \
+    for i in $(seq 1 5); do \
+        npx vite build && break || (echo "Vite build failed on attempt $i"; \
+        if [ $i -eq 5 ]; then exit 1; fi; \
+        sleep 10); \
+    done
 
 # Check if the build directory is created
 RUN ls -la /usr/src/app/build
