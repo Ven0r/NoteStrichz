@@ -25,7 +25,10 @@ RUN npx vite --version || (echo "Vite not found"; exit 1)
 COPY . ./
 
 # Build the app for production
-RUN /usr/src/app/node_modules/.bin/vite build || (echo "Vite build failed"; exit 1)
+RUN npm run build || (echo "Vite build failed"; exit 1)
+
+# Check if the build directory is created
+RUN ls -la /usr/src/app/build
 
 # Stage 2: Serve the SvelteKit application with Nginx
 FROM nginx:alpine
