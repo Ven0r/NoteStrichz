@@ -31,7 +31,7 @@ RUN /usr/src/app/node_modules/.bin/vite build || (echo "Vite build failed"; exit
 FROM nginx:alpine
 
 # Copy the built app from the previous stage
-COPY --from=build /usr/src/app/.svelte-kit/output /usr/share/nginx/html
+COPY --from=build /usr/src/app/build /usr/share/nginx/html
 
 # Copy the Nginx configuration file
 COPY nginx.conf /etc/nginx/conf.d/default.conf
