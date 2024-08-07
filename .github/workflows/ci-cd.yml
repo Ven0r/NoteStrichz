@@ -28,7 +28,7 @@ jobs:
       - name: Build the application
         run: npm run build
 
-        name: Check Folder
+      - name: Check folders
         run: ls -la
 
       - name: Log in to Docker Hub
