@@ -4,13 +4,14 @@ FROM node:20 AS build
 # Set the working directory
 WORKDIR /usr/src/app
 
-# Copy the package.json and package-lock.json files
+# Copy the package.json, package-lock.json, and tsconfig.json files
 COPY package*.json ./
+COPY tsconfig.json ./
 
 # Install dependencies with retry and logging
 RUN set -e; \
     for i in $(seq 1 5); do \
-        npm install && break || (echo "npm install failed on attempt $i"; \
+        npm ci && break || (echo "npm ci failed on attempt $i"; \
         if [ $i -eq 5 ]; then exit 1; fi; \
         sleep 10); \
     done
@@ -18,13 +19,8 @@ RUN set -e; \
 # Add node_modules/.bin to PATH
 ENV PATH=/usr/src/app/node_modules/.bin:$PATH
 
-# Verify Vite installation with retry
-RUN set -e; \
-    for i in $(seq 1 5); do \
-        npx vite --version && break || (echo "npx vite failed on attempt $i"; \
-        if [ $ i -eq 5 ]; then exit 1; fi; \
-        sleep 10); \
-    done
+# Run svelte-kit sync to ensure .svelte-kit directory is available
+RUN npx svelte-kit sync
 
 # Copy the rest of the application code
 COPY . ./

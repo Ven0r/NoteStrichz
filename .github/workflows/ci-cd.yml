@@ -23,7 +23,7 @@ jobs:
           node-version: '20'
 
       - name: Install dependencies
-        run: npm install 2>&1 | tee npm-install.log
+        run: npm ci 2>&1 | tee npm-install.log
 
       - name: Build the application
         run: npm run build
